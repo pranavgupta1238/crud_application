@@ -1,0 +1,42 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: react-mongo-demo-db
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+    container_name: react-mongo-demo-api
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env.example
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://mongo:27017/react_mongo_demo
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: react-mongo-demo-web
+    restart: unless-stopped
+    env_file:
+      - ./frontend/.env.example
+    environment:
+      VITE_API_BASE_URL: http://localhost:5000/api
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
