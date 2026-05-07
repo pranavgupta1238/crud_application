@@ -20,7 +20,7 @@ services:
       MONGODB_URI: mongodb://mongo:27017/react_mongo_demo
       CLIENT_URL: http://localhost:5173
     ports:
-      - "5000:5000"
+      - "5001:5000"
     depends_on:
       - mongo
 
@@ -32,7 +32,7 @@ services:
     env_file:
       - ./frontend/.env.example
     environment:
-      VITE_API_BASE_URL: http://localhost:5000/api
+      VITE_API_BASE_URL: http://localhost:5001/api
     ports:
       - "5173:5173"
     depends_on:
